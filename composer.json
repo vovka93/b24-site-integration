@@ -1,6 +1,7 @@
 {
   "name": "name/b24-site-integration",
   "type": "library",
+  "license": "MIT",
   "require": {
     "andrey-tech/bitrix24-api-php": "^1.7"
   },
