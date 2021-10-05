@@ -38,15 +38,31 @@ class Bitrix24 {
 
   private function findContact($type, $value) {
     try {
+      if($type == 'PHONE') {
+        $value = $this->cleanPhone($value);
+      }
       $generator = $this->bx24->getContactList([$type=>$value], ['ID'], []);
       foreach ($generator as $contacts) {
         foreach($contacts as $contact) {
           return $contact['ID'];
         }
       }
+      if(strpos($value, '+38') !== false) {
+        return $this->findContact($type, str_replace('+38', '', $value));
+      }
     } catch (Bitrix24APIException $e) {
       return;
     }
+  }
+
+  private function cleanPhone($phone) {
+    $cleanPhone = preg_replace("/[^+0-9]/", "", $phone);
+    if(strpos($cleanPhone, '+') === false) {
+      if(strlen($cleanPhone) == 12) {
+        $cleanPhone = '+'.$cleanPhone;
+      }
+    }
+    return $cleanPhone;
   }
 
 }
