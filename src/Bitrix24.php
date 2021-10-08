@@ -17,7 +17,7 @@ class Bitrix24 {
     try {
       $communications = ['PHONE', 'EMAIL'];
       foreach ($communications as $communication) {
-        if(array_key_exists($communication, $lead)) {
+        if(array_key_exists($communication, $lead) && $lead[$communication] != '') {
           $contactID = $this->findContact($communication, $lead[$communication]);
           if($contactID) {
             $lead['CONTACT_ID'] = $contactID;
@@ -36,7 +36,7 @@ class Bitrix24 {
     }
   }
 
-  private function findContact($type, $value) {
+  public function findContact($type, $value) {
     try {
       if($type == 'PHONE') {
         $value = $this->cleanPhone($value);
